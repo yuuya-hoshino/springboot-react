@@ -1,13 +1,16 @@
 version: '3'
 services:
-  # ... 他のサービスの定義
-  create-react-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: sh -c "npx create-react-app my-react-app --template typescript && cd my-react-app"
+  frontend:
+    build: .
+    environment:
+      - NODE_ENV=development
     volumes:
-      - ./my-react-app:/app/my-react-app
+      - ./:/usr/src/app
+    command: sh -c 'cd todo-react && yarn start'
+    ports:
+      - 8000:3000
+    tty: true
+  # ... 他のサービスの定義
   postgres:
     image: postgres
     environment:
