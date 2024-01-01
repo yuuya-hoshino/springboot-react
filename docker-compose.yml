@@ -1,0 +1,35 @@
+version: '3'
+services:
+  # ... 他のサービスの定義
+  create-react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "npx create-react-app my-react-app --template typescript && cd my-react-app"
+    volumes:
+      - ./my-react-app:/app/my-react-app
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: your-database-name
+      POSTGRES_USER: your-username
+      POSTGRES_PASSWORD: your-password
+    ports:
+      - "5432:5432"
+    networks:
+      - my-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - my-network
+
+networks:
+  my-network:
